@@ -8,7 +8,6 @@ def extrair_descricao(pdf_file):
         reader = PyPDF2.PdfReader(pdf_file)
         for page in reader.pages:
             text = page.extract_text()
-            st.write(f"Texto extraído: {text}")  # Log para verificar o texto extraído (para depuração)
             for line in text.split("\n"):
                 if "DESCRICAO:" in line:
                     return line.replace("DESCRICAO:", "").strip()
@@ -19,13 +18,18 @@ def extrair_descricao(pdf_file):
 # Título da aplicação
 st.title("Renomeador de Comprovantes Bancários")
 
+# Limpar os registros anteriores
+if st.button('Limpar registros'):
+    st.session_state.uploaded_files = []
+
 # Fazer o upload de múltiplos arquivos
 uploaded_files = st.file_uploader("Envie os comprovantes em PDF", accept_multiple_files=True, type=["pdf"])
 
-# Verificar se os arquivos foram enviados
+# Se os arquivos forem enviados, processa-los
 if uploaded_files:
+    st.session_state.uploaded_files = uploaded_files  # Salvar arquivos no estado da sessão para persistência
     for i, uploaded_file in enumerate(uploaded_files):
-        st.write(f"Arquivo {i+1}: {uploaded_file.name}")  # Log para verificar se o arquivo foi carregado
+        st.write(f"Arquivo {i+1}: {uploaded_file.name}")  # Exibir o nome do arquivo carregado
 
         # Tentar extrair a descrição
         descricao = extrair_descricao(uploaded_file)
