@@ -31,27 +31,25 @@ def gerar_pdf_individual(uploaded_file):
     
     return output_pdf
 
+# Função para limpar a sessão e simular um F5 (atualizar a página)
+def limpar_arquivos():
+    if 'uploaded_files' in st.session_state:
+        del st.session_state.uploaded_files
+
 # Título da aplicação
 st.title("Renomeador de Comprovantes Bancários")
 
-# Verificar se o botão "Limpar registros" foi pressionado
-if 'uploaded_files' in st.session_state:
-    uploaded_files = st.session_state.uploaded_files
-else:
-    uploaded_files = []
-
 # Botão para limpar os arquivos carregados
 if st.button('Limpar registros'):
-    st.session_state.uploaded_files = []  # Limpa os arquivos carregados
-    uploaded_files = []  # Reseta a lista de arquivos carregados
+    limpar_arquivos()  # Limpa os arquivos carregados e simula o F5
 
 # Fazer o upload de múltiplos arquivos
-new_files = st.file_uploader("Envie os comprovantes em PDF", accept_multiple_files=True, type=["pdf"])
+uploaded_files = st.file_uploader("Envie os comprovantes em PDF", accept_multiple_files=True, type=["pdf"])
 
 # Adicionando novos arquivos à sessão (caso tenham sido carregados)
-if new_files:
-    st.session_state.uploaded_files = new_files  # Atualiza os arquivos na sessão
-    uploaded_files = new_files
+if uploaded_files:
+    st.session_state.uploaded_files = uploaded_files  # Atualiza os arquivos na sessão
+    uploaded_files = uploaded_files
 
 # Exibir contagem de arquivos convertidos
 if uploaded_files:
