@@ -40,3 +40,4 @@ if uploaded_files:
         else:
             st.warning(f"Não foi possível extrair a DESCRICAO do arquivo {uploaded_file.name}")
 
+
